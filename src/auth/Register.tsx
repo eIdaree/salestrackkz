@@ -131,8 +131,8 @@ const Register: React.FC = () => {
                   {...register('password', { 
                     required: 'Нужно ввести пароль', 
                     minLength: {
-                      value: 6,
-                      message: 'Пароль должен содержать минимум 6 символов'
+                      value: 8,
+                      message: 'Пароль должен содержать минимум 8 символов'
                     },
                     maxLength: {
                       value: 20,

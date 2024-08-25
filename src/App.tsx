@@ -19,13 +19,18 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
-      store.checkAuth().finally(() => {
-        setIsLoaded(true); 
-      });
-    } else {
+    const checkAuthStatus = async () => {
+      if (localStorage.getItem('token')) {
+        try {
+          await store.checkAuth();
+        } catch (error) {
+          console.error('Error checking auth:', error);
+        }
+      }
       setIsLoaded(true);
-    }
+    };
+
+    checkAuthStatus();
   }, [store]);
 
   if (!isLoaded) {

@@ -1,21 +1,19 @@
-import {IUser} from "../types/types";
+import { IUser, AuthResponse } from "../types/types";
 import AuthService from "../services/AuthService";
 import axios from 'axios';
-import {AuthResponse} from  "../types/types";
 import { makeAutoObservable } from "mobx";
-
-
 
 export default class Store {
     user = {} as IUser;
     isAuth = false;
     isLoading = false;
-    API_URL = import.meta.env.VITE_BACK_URL
-
+    API_URL = import.meta.env.VITE_BACK_URL;
 
     constructor() {
         makeAutoObservable(this);
+        this.checkAuth(); // Проверяем аутентификацию при инициализации
     }
+
     setAuth(bool: boolean) {
         this.isAuth = bool;
     }
@@ -28,59 +26,65 @@ export default class Store {
         this.isLoading = bool;
     }
 
-    async login(email: string, password: string,phone_number:string) {
+    async login(email: string, password: string, phone_number: string) {
         try {
-            const response = await AuthService.login(email, password,phone_number);
-            console.log(response)
+            const response = await AuthService.login(email, password, phone_number);
             localStorage.setItem('token', response.data.access);
-            localStorage.setItem('refresh',response.data.refresh)
+            localStorage.setItem('refresh', response.data.refresh);
             this.setAuth(true);
-            console.log('login is auth:',this.isAuth)
             this.setUser(response.data.user);
-            return true
-        } catch (e:any) {
+            return true;
+        } catch (e: any) {
             console.log(e.response?.data?.message);
+            return false;
         }
     }
 
-    async registration(email: string, password: string, phone_number:string, first_name:string,last_name:string) {
+    async registration(email: string, password: string, phone_number: string, first_name: string, last_name: string) {
         try {
-            
-            const response = await AuthService.registration(email, password, phone_number, first_name, last_name);
-    
-            console.log(response)
-            return true
-        } catch (e:any) {
+            await AuthService.registration(email, password, phone_number, first_name, last_name);
+            return true;
+        } catch (e: any) {
             console.log(e.response?.data?.message);
+            return false;
         }
     }
 
     async logout() {
         try {
-            // const response = await AuthService.logout();
             localStorage.removeItem('token');
-            localStorage.removeItem('refresh')
+            localStorage.removeItem('refresh');
             this.setAuth(false);
             this.setUser({} as IUser);
-        } catch (e:any) {
+        } catch (e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
     async checkAuth() {
         this.setLoading(true);
-        
-        try {
-            const refresh_token = localStorage.getItem('refresh')
-            console.log('checkAuth refresh:',refresh_token);
 
-            const response = await axios.post<AuthResponse>(`${this.API_URL}auth/token/refresh/`,{refresh: refresh_token}, {withCredentials: true})
-            console.log('checkAuth response:',response);
+        try {
+            const refresh_token = localStorage.getItem('refresh');
+            if (!refresh_token) {
+                this.setAuth(false);
+                return;
+            }
+
+            const response = await axios.post<AuthResponse>(
+                `${this.API_URL}auth/token/refresh/`,
+                { refresh: refresh_token },
+                { withCredentials: true }
+            );
+
             localStorage.setItem('token', response.data.access);
             this.setAuth(true);
             this.setUser(response.data.user);
-        } catch (e:any) {
+        } catch (e: any) {
             console.log(e.response?.data?.message);
+            localStorage.removeItem('token');
+            localStorage.removeItem('refresh');
+            this.setAuth(false);
         } finally {
             this.setLoading(false);
         }
