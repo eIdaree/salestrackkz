@@ -8,10 +8,11 @@ import { IWorker } from '../../types/types';
 
 type WorkerTableProps = {
   workers: IWorker[];
+  onAddWorker: () => void;
 };
 
 
-const WorkerTable: React.FC<WorkerTableProps> = ({ workers }) => {
+const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isWorkerPage, setIsWorkerPage] = useState(false);
@@ -60,7 +61,14 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers }) => {
         )}
       </nav>
 
-      {showAddWorkerModal && <AddWorker onClose={() => setShowAddWorkerModal(false)} />}
+      {showAddWorkerModal && (
+        <AddWorker 
+          onClose={() => { 
+            setShowAddWorkerModal(false); 
+            onAddWorker(); 
+          }} 
+        />
+      )}
 
       <div className="overflow-y-hidden">
         <table className="min-w-full hidden md:table">

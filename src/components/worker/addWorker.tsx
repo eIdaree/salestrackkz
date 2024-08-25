@@ -11,7 +11,7 @@ type WorkerFormData = {
 };
 
 type WorkDay = {
-  day: string; // Keep this as a string for form handling
+  day: string; 
   startTime: string;
   endTime: string;
 };
@@ -20,21 +20,22 @@ type WorkScheduleData = {
   work_schedule: WorkDay[];
 };
 
+
+
 const daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
 
 const AddWorker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [step, setStep] = useState(1); // Step 1: Worker details, Step 2: Work schedule
+  const [step, setStep] = useState(1);
   const [workerId, setWorkerId] = useState<string | null>(null);
   const { register, handleSubmit, watch, setValue, getValues, formState: { errors } } = useForm<WorkerFormData & WorkScheduleData>();
 
   const watchedSchedule = watch("work_schedule");
 
-  // Function to handle the worker form submission
   const handleWorkerSubmit: SubmitHandler<WorkerFormData> = async (data) => {
     try {
       const response = await axios.post('https://sailau.xyz/api/employee/', data);
-      setWorkerId(response.data.id); // Assume the API returns the worker ID in response
-      setStep(2); // Move to the next step
+      setWorkerId(response.data.id); 
+      setStep(2); 
     } catch (error) {
       console.error('Error submitting worker data:', error);
     }
