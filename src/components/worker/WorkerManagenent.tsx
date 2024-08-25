@@ -14,7 +14,6 @@ const WorkerManagement: React.FC = () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACK_URL}employee`);
       const userdata = response.data.results;
-      console.log(userdata);
       if (userdata) {
         setWorkers(userdata);
       }
