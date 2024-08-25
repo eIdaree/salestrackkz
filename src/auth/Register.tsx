@@ -27,16 +27,16 @@ const Register: React.FC = () => {
     try {
       const requ = await store.registration(email, password, phone_number, first_name, last_name);
       if(requ){
-        toast.success('User registered')
-        console.log('User registered');
+        toast.success('Пользователь зарегистрировался')
         setTimeout(() => {
           navigate('/');
         }, 1500);
       } else{
-        toast.error('Что-то произошло не так')
+        toast.error('Что-то произошло не так',)
       }
     
-    } catch (err) {
+    } catch (err:any) {
+      toast.error(err)
       setSubmitError("Не получилось зарегистрироваться");
     }
   };
