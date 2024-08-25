@@ -3,6 +3,7 @@ import logo from '../assets/logo.svg';
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Context } from '../main';
+import { toast } from 'react-toastify';
 
 type RegisterFormData = {
   first_name: string;
@@ -24,11 +25,19 @@ const Register: React.FC = () => {
     const phone_number = phoneNumber.startsWith('+') ? phoneNumber.slice(1) : phoneNumber;
     
     try {
-      store.registration(email, password, phone_number, first_name, last_name);
-      console.log('User registered');
-      navigate('/');
+      const requ = await store.registration(email, password, phone_number, first_name, last_name);
+      if(requ){
+        toast.success('User registered')
+        console.log('User registered');
+        setTimeout(() => {
+          navigate('/');
+        }, 1500);
+      } else{
+        toast.error('Что-то произошло не так')
+      }
+    
     } catch (err) {
-      setSubmitError("Failed to register");
+      setSubmitError("Не получилось зарегистрироваться");
     }
   };
 

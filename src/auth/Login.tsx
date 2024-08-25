@@ -20,15 +20,16 @@ const Login: React.FC = () => {
     try {
       const {email,password} = data
       const phone_number = ''
-      store.login(email,password,phone_number)
+      const requ = await store.login(email,password,phone_number)
       
-      toast.success('User successfully signed in!');
-      setTimeout(() => {
-        navigate('/');
-      }, 1500); 
+      if(requ){
+        toast.success('Пользователь успешно зашел!');
+        setTimeout(() => {
+          navigate('/');
+        }, 1500); 
+      } else{       toast.error('Логин или пароль неправильно.');}
     } catch (error) {
       console.error('Error during login:', error);
-      toast.error('Login failed. Please try again.');
     }
   };
 
