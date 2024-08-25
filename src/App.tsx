@@ -4,14 +4,28 @@ import Sidebar from './layout/Sidebar';
 import Dashboard from './layout/Dashboard';
 import Login from './auth/Login';
 import Register from './auth/Register';
-import WorkerManagement from './components/worker/WorkerManagenent';
+import WorkerManagement from './components/worker/WorkerManagenent'; // Исправлено
 import { ToastContainer } from 'react-toastify';
 import { useContext, useEffect, useState } from 'react';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile';
 import { Context } from './main';
 import Page404 from './pages/Page404';
-import WorkerDetailPage from './components/worker/workerDetailPage';
+import WorkerDetailPage from './components/worker/workerDetailPage'; // Исправлено
+
+const ProtectedRoute: React.FC<{ element: JSX.Element }> = ({ element }) => {
+  const { store } = useContext(Context);
+  
+  if (store.isLoading) {
+    return <div>Загрузка...</div>;
+  }
+
+  if (!store.isAuth) {
+    return <Navigate to="/" />;
+  }
+
+  return element;
+};
 
 function App() {
   const { store } = useContext(Context);
@@ -19,32 +33,13 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const checkAuthStatus = async () => {
-      if (localStorage.getItem('token')) {
-        try {
-          await store.checkAuth();
-        } catch (error) {
-          console.error('Error checking auth:', error);
-        }
-      }
+    store.checkAuth().finally(() => {
       setIsLoaded(true);
-    };
-
-    checkAuthStatus();
+    });
   }, [store]);
 
   if (!isLoaded) {
     return <div>Загрузка...</div>;
-  }
-
-  if (!store.isAuth) {
-    return (
-      <Routes>
-        <Route path="*" element={<Page404 />} />
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    );
   }
 
   const handleLogout = async () => {
@@ -59,15 +54,28 @@ function App() {
   return (
     <div>
       <div className="flex h-screen">
-        <Sidebar onLogout={handleLogout} />
+        {store.isAuth && <Sidebar onLogout={handleLogout} />}
         <div className="flex-1 p-4 bg-gray-200">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/workers" element={<WorkerManagement />} />
-            <Route path="/workers/:id" element={<WorkerDetailPage />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="*" element={<Navigate to="/" />} />
+            {/* Роуты для неаутентифицированных пользователей */}
+            {!store.isAuth && (
+              <>
+                <Route path="*" element={<Page404 />} />
+                <Route path="/" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+              </>
+            )}
+
+            {/* Роуты для аутентифицированных пользователей */}
+            <Route path="/" element={<Navigate to="/dashboard" />} />
+            <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
+            <Route path="/workers" element={<ProtectedRoute element={<WorkerManagement />} />} />
+            <Route path="/workers/:id" element={<ProtectedRoute element={<WorkerDetailPage />} />} />
+            <Route path="/settings" element={<ProtectedRoute element={<Settings />} />} />
+            <Route path="/profile" element={<ProtectedRoute element={<Profile />} />} />
+            
+            {/* Страница 404 */}
+            <Route path="*" element={<Page404 />} />
           </Routes>
           <ToastContainer />
         </div>
