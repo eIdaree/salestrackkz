@@ -1,30 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios, { AxiosPromise } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import WorkerEditModal from './WorkerEditModal';
+import { IWorker } from '../../types/types';
 
-type Worker = {
-  id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone_number: string;
-  salary: number;
-  is_whatsapp_verify: boolean;
-  is_telegram_verify: boolean;
-  telegram_id: string;
-};
+
+
+
 
 const WorkerDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); 
-  const [worker, setWorker] = useState<Worker | null>(null);
+  const [worker, setWorker] = useState<IWorker | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchWorker = async () => {
       try {
-        const userdata = await axios.get<AxiosPromise<Worker>>(`${import.meta.env.VITE_BACK_URL}employee/${id}/`);
-        setWorker(userdata.data);
+        const response: AxiosResponse<IWorker> = await axios.get(`${import.meta.env.VITE_BACK_URL}employee/${id}/`);
+        setWorker(response.data);
       } catch (error) {
         console.error('Error fetching worker details:', error);
       }
@@ -33,7 +26,7 @@ const WorkerDetailPage: React.FC = () => {
     fetchWorker();
   }, [id]);
 
-  const handleWorkerUpdate = (updatedWorker: Worker) => {
+  const handleWorkerUpdate = (updatedWorker: IWorker) => {
     setWorker(updatedWorker);
   };
 
@@ -43,7 +36,7 @@ const WorkerDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen p-8">
-      <div className="bg-white-100 p-6 rounded-lg shadow-lg">
+      <div className="bg-white p-6 rounded-lg shadow-lg">
         <div className='flex gap-4 items-center'>
           <h2 className="text-2xl font-bold mb-4">{worker.first_name} {worker.last_name}</h2>
           <button onClick={() => setIsEditModalOpen(true)} className="bg-blue-500 text-white px-4 py-2 rounded">

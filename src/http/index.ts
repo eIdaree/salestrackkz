@@ -1,7 +1,5 @@
 import axios from 'axios';
-import {AuthResponse} from "../models/response/AuthResponse";
-import {store} from "../index";
-import {IUser} from "../models/IUser";
+import {AuthResponse} from "../types/types"
 
 
 

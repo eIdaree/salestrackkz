@@ -1,27 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { ISchedule, IWorker } from '../../types/types';
 
-type Schedule = {
-  id: number;
-  week_day: number;
-  time_from: string;
-  time_to: string;
-};
 
-type Worker = {
-  id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone_number: string;
-  salary: string;
-  schedule: Schedule[];
-};
 
 type WorkerEditModalProps = {
-  worker: Worker;
+  worker: IWorker;
   onClose: () => void;
-  onUpdate: (updatedWorker: Worker) => void;
+  onUpdate: (updatedWorker: IWorker) => void;
 };
 
 const DAYS_OF_WEEK = [
@@ -35,19 +21,19 @@ const DAYS_OF_WEEK = [
 ];
 
 const WorkerEditModal: React.FC<WorkerEditModalProps> = ({ worker, onClose, onUpdate }) => {
-  const [formData, setFormData] = useState<Worker>({ ...worker, schedule: [] });
+  const [formData, setFormData] = useState<IWorker>({ ...worker, schedule: worker.schedule || [], });
   const [activeDays, setActiveDays] = useState<number[]>([]);
   const [isEditingSchedule, setIsEditingSchedule] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchSchedule = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACK_URL}schedule/?employee_id=${worker.id}`);
+        const response = await axios.get<ISchedule[]>(`${import.meta.env.VITE_BACK_URL}schedule/?employee_id=${worker.id}`);
         setFormData((prevFormData) => ({
           ...prevFormData,
           schedule: response.data, // Assuming the API returns the schedule as an array
         }));
-        setActiveDays(response.data.map((schedule: Schedule) => schedule.week_day));
+        setActiveDays(response.data.map((schedule: ISchedule) => schedule.week_day));
       } catch (error) {
         console.error('Error fetching schedule:', error);
       }

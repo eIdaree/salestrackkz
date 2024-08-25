@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-// import { useAuth } from './auth/authContext';
 import { observer } from 'mobx-react-lite';
 import Sidebar from './layout/Sidebar';
 import Dashboard from './layout/Dashboard';
@@ -10,22 +9,12 @@ import { ToastContainer } from 'react-toastify';
 import { useContext, useEffect } from 'react';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { RootState } from './redux/store';
 import { Context } from './main';
 import Page404 from './pages/Page404';
 import WorkerDetailPage from './components/worker/workerDetailPage';
 
 
-// Созвоны с бэком
-// Дописать продукт
-// Исправление фонта
-// Написать телега и ватсап чекер 
-
-
 function App() {
-
-  // const dispatch = useDispatch();
   const {store} = useContext(Context);
   const navigate = useNavigate();
 
@@ -48,18 +37,7 @@ if (!store.isAuth) {
       </Routes>
   );
 }
-  // const isAuth = useSelector((state: RootState) => state.auth.isAuth);
-  // const user = useSelector((state: RootState) => state.auth.user);
-
-  // useEffect(() => {
-  //   const unsubscribe = ((user: IUser) => {
-  //     dispatch(setAuth(true));
-  //     dispatch(setUser(user));
-  //   });
-
-  //   unsubscribe();
-  // }, []);
-
+  
   const handleLogout = async () => {
     try {
       store.logout();

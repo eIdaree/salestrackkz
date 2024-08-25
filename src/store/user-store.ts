@@ -1,7 +1,7 @@
-import {IUser} from "../models/IUser";
+import {IUser} from "../types/types";
 import AuthService from "../services/AuthService";
 import axios from 'axios';
-import {AuthResponse} from "../models/response/AuthResponse";
+import {AuthResponse} from  "../types/types";
 import { makeAutoObservable } from "mobx";
 
 
@@ -37,7 +37,7 @@ export default class Store {
             this.setAuth(true);
             console.log('login is auth:',this.isAuth)
             this.setUser(response.data.user);
-        } catch (e) {
+        } catch (e:any) {
             console.log(e.response?.data?.message);
         }
     }
@@ -46,7 +46,7 @@ export default class Store {
         try {
             const response = await AuthService.registration(email, password, phone_number, first_name, last_name);
             console.log(response)
-        } catch (e) {
+        } catch (e:any) {
             console.log(e.response?.data?.message);
         }
     }
@@ -58,7 +58,7 @@ export default class Store {
             localStorage.removeItem('refresh')
             this.setAuth(false);
             this.setUser({} as IUser);
-        } catch (e) {
+        } catch (e:any) {
             console.log(e.response?.data?.message);
         }
     }
@@ -76,7 +76,7 @@ export default class Store {
             localStorage.setItem('token', response.data.access);
             this.setAuth(true);
             this.setUser(response.data.user);
-        } catch (e) {
+        } catch (e:any) {
             console.log(e.response?.data?.message);
         } finally {
             this.setLoading(false);

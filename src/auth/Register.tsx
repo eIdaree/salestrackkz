@@ -13,7 +13,7 @@ type RegisterFormData = {
 };
 
 const Register: React.FC = () => {
-  const { register, handleSubmit, formState: { errors }, setError } = useForm<RegisterFormData>();
+  const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>();
   const [showPasswordFields, setShowPasswordFields] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const navigate = useNavigate();

@@ -2,58 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { inviteFetch } from '../../util/constants';
 import AddWorker from './addWorker';
+import { IWorker } from '../../types/types';
 
-type Worker = {
-  id: string;
-  companyID: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone_number: string;
-  salary: number;
-  is_whatsapp_verify: boolean;
-  is_telegram_verify: boolean;
-  telegram_id: string;
-};
+
 
 type WorkerTableProps = {
-  workers: Worker[];
+  workers: IWorker[];
 };
 
-// const checkWhatsAppRegistration = async (phoneNumber: string) => {
-//   try {
-//     const response = await fetch('http://localhost:5000/api/check-whatsapp', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ phone_number: phoneNumber }),
-//     });
-
-//     const data = await response.json();
-//     if (response.ok) {
-//       return data.isRegistered;
-//     } else {
-//       console.error('Error checking WhatsApp registration:', data.message);
-//       return false;
-//     }
-//   } catch (error) {
-//     console.error('Network error checking WhatsApp registration:', error);
-//     return false;
-//   }
-// };
-
-// const handleWhatsAppCheck = async (worker: Worker) => {
-//   const isRegistered = await checkWhatsAppRegistration(worker.phone_number);
-//   return isRegistered;
-// };
 
 const WorkerTable: React.FC<WorkerTableProps> = ({ workers }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isWorkerPage, setIsWorkerPage] = useState(false);
   const [showAddWorkerModal, setShowAddWorkerModal] = useState(false);
-  const [updatedWorkers, setUpdatedWorkers] = useState<Worker[]>(workers);
+  const [updatedWorkers, setUpdatedWorkers] = useState<IWorker[]>(workers);
 
   useEffect(() => {
     if (location.pathname === '/workers') {
@@ -69,7 +32,7 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers }) => {
     },[workers])
 
 
-  const handleInvite = async (worker: Worker) => {
+  const handleInvite = async (worker: IWorker) => {
     const data = {
       phone_number: worker.phone_number,
       first_name: worker.first_name,
