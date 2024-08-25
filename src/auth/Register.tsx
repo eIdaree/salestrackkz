@@ -128,9 +128,17 @@ const Register: React.FC = () => {
                 <input
                   type="password"
                   id="password"
-                  {...register('password', { required: 'Нужно ввести пароль' })}
-                  className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-indigo-300"
-                  placeholder="Ваш пароль"
+                  {...register('password', { 
+                    required: 'Нужно ввести пароль', 
+                    minLength: {
+                      value: 6,
+                      message: 'Пароль должен содержать минимум 6 символов'
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: 'Пароль не может превышать 20 символов'
+                    }
+                  })}
                 />
                 {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
               </div>
