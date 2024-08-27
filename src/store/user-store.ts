@@ -43,10 +43,9 @@ export default class Store {
     async registration(email: string, password: string, phone_number: string, first_name: string, last_name: string) {
         try {
             await AuthService.registration(email, password, phone_number, first_name, last_name);
-            return true;
+            return { success: true};
         } catch (e: any) {
-            console.log(e.response?.data?.message);
-            return false;
+            return {success:false, message: e.response?.data?.message};
         }
     }
 

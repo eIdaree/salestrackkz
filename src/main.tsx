@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOMClient from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
@@ -15,7 +15,15 @@ export const Context = createContext<State>({
   store,
 });
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+  throw new Error("Root element not found");
+}
+
+const root = ReactDOMClient.createRoot(rootElement);
+
+// Render your application using the existing root
+root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Context.Provider value={{ store }}>
