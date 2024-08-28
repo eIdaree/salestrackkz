@@ -1,4 +1,4 @@
-import React, { Suspense,  useState } from 'react';
+import React, { Suspense,  useEffect,  useState } from 'react';
 import WorkerTable from './WorkerTable';
 import axios from 'axios';
 import { IWorker } from '../../types/types';
@@ -22,13 +22,18 @@ const WorkerManagement: React.FC = () => {
   const handleAddWorker = () => {
     getWorkerList(); 
   };
+  const handleDeleteWorker = () => {
+    getWorkerList();
+  } ;
 
- 
+  useEffect(() => {
+    getWorkerList();
+  }, []);
 
   return (
     <div>
       <Suspense fallback={<div>Loading...</div>}>
-        <WorkerTable workers={workers}  onAddWorker={handleAddWorker} />
+        <WorkerTable workers={workers}  onAddWorker={handleAddWorker} onDeleteWorker={handleDeleteWorker}  />
       </Suspense>
     </div>
   );

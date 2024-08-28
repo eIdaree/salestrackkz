@@ -3,16 +3,18 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { inviteFetch } from '../../util/constants';
 import AddWorker from './addWorker';
 import { IWorker } from '../../types/types';
+import axios from 'axios';
 
 
 
 type WorkerTableProps = {
   workers: IWorker[];
   onAddWorker: () => void;
+  onDeleteWorker: () => void;
 };
 
 
-const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker }) => {
+const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDeleteWorker }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isWorkerPage, setIsWorkerPage] = useState(false);
@@ -42,7 +44,10 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker }) => {
 
     inviteFetch({ data, method: 'POST' });
   };
-
+  const handleDelete = async (worker:IWorker) =>{
+      await axios.delete<IWorker>(`https://sailau.xyz/api/employee/${worker.id}`);
+      onDeleteWorker();
+  }
   const handleRowClick = (workerID: string) => {
     navigate(`/workers/${workerID}`);
   };
@@ -99,7 +104,7 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker }) => {
                 <td>{worker.is_telegram_verify ? '✔️' : '❌'}</td>
                 <td>{worker.is_whatsapp_verify ? '✔️' : '❌'}</td>
                 {isWorkerPage && (
-                  <td>
+                  <td >
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -108,6 +113,16 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker }) => {
                       className="bg-blue-500 py-1 px-2 rounded-xl hover:bg-blue-600 text-white"
                     >
                       Пригласить
+                    </button>
+                    <button
+                      onClick={(e)=>{
+                        e.stopPropagation();
+                        handleDelete(worker);
+                      }}
+
+                      className="bg-blue-500 py-1 px-4 ml-4 rounded-xl hover:bg-red-600 text-white"
+                    >
+                      X
                     </button>
                   </td>
                 )}
@@ -129,6 +144,7 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker }) => {
                   {worker.first_name} {worker.last_name}
                 </div>
                 {isWorkerPage && (
+                  <>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -138,6 +154,17 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker }) => {
                   >
                     Пригласить
                   </button>
+                  <button
+                  onClick={(e)=>{
+                    e.stopPropagation();
+                    handleDelete(worker);
+                  }}
+
+                  className="bg-blue-500 py-1 px-4 ml-4 rounded-xl hover:bg-red-600 text-white"
+                >
+                  X
+                </button>
+                </>
                 )}
               </div>
               <div className="space-y-2 text-sm">

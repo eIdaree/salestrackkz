@@ -33,7 +33,12 @@ const AddWorker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
   const handleWorkerSubmit: SubmitHandler<WorkerFormData> = async (data) => {
     try {
-      const response = await axios.post('https://sailau.xyz/api/employee/', data);
+      const {first_name,last_name,email,phone_number,salary} = data;
+      const phoneNumber = phone_number.startsWith("+7")
+      ? phone_number.slice(2)
+      : phone_number;
+ 
+      const response = await axios.post('https://sailau.xyz/api/employee/', {first_name, last_name,phone_number:phoneNumber, email, salary });
       setWorkerId(response.data.id); 
       setStep(2); 
     } catch (error) {
@@ -49,7 +54,6 @@ const AddWorker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         time_to: day.endTime
       })).filter(day => day.week_day !== -1);
 
-      console.log(mappedSchedule);
       try {
         for (const schedule of mappedSchedule) {
           const url = `https://sailau.xyz/api/schedule/?employee_id=${workerId}`;
