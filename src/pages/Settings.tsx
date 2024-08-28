@@ -3,7 +3,7 @@ type Props = {}
 
 function Settings({}: Props) {
   return (
-    <div>Settings</div>
+    <div>Данная страница находится в разработке...</div>
   )
 }
 

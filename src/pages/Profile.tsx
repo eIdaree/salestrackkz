@@ -29,7 +29,7 @@ const Profile: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-blue-60 text-lg">Загружается...</div>
+        <div className="text-blue-60 text-lg">Данная страница находится в разработке</div>
       </div>
     );
   }

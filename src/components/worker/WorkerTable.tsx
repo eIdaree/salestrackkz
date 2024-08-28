@@ -83,9 +83,13 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
               <th>Почта</th>
               <th>Номер телефона</th>
               <th>Зарплата</th>
-              <th>Telegram</th>
-              <th>WhatsApp</th>
-              {isWorkerPage && <th>Действие</th>}
+              
+              {isWorkerPage &&
+              <>
+                <th>Telegram</th> 
+                <th>WhatsApp</th>
+                <th>Действие</th>
+                </>}
             </tr>
           </thead>
           <tbody>
@@ -101,9 +105,11 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
                 <td>{worker.email}</td>
                 <td>{worker.phone_number}</td>
                 <td>{worker.salary}</td>
-                <td>{worker.is_telegram_verify ? '✔️' : '❌'}</td>
-                <td>{worker.is_whatsapp_verify ? '✔️' : '❌'}</td>
+                
                 {isWorkerPage && (
+                  <>
+                  <td>{worker.is_telegram_verify ? '✔️' : '❌'}</td>
+                  <td>{worker.is_whatsapp_verify ? '✔️' : '❌'}</td>
                   <td >
                     <button
                       onClick={(e) => {
@@ -125,6 +131,7 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
                       X
                     </button>
                   </td>
+                  </>
                 )}
               </tr>
             ))}
@@ -145,6 +152,7 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
                 </div>
                 {isWorkerPage && (
                   <>
+                  <div>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -164,6 +172,7 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
                 >
                   X
                 </button>
+                </div>
                 </>
                 )}
               </div>
@@ -177,6 +186,7 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
                 <div>
                   <span className="font-semibold">Зарплата:</span> {worker.salary}
                 </div>
+                
                 <div>
                   <span className="font-semibold">Telegram:</span> {worker.is_telegram_verify ? '✔️' : '❌'}
                 </div>
