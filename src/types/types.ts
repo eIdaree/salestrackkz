@@ -4,7 +4,7 @@ export interface IWorker {
   last_name: string;
   email: string;
   phone_number: string;
-  salary: number;
+  salary: string;
   is_whatsapp_verify?: boolean;
   is_telegram_verify?: boolean;
   telegram_id?: string;

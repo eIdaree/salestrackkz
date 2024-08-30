@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { inviteFetch } from '../../util/constants';
 import AddWorker from './addWorker';
 import { IWorker } from '../../types/types';
 import axios from 'axios';
-
-
 
 type WorkerTableProps = {
   workers: IWorker[];
@@ -13,13 +10,11 @@ type WorkerTableProps = {
   onDeleteWorker: () => void;
 };
 
-
 const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDeleteWorker }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isWorkerPage, setIsWorkerPage] = useState(false);
   const [showAddWorkerModal, setShowAddWorkerModal] = useState(false);
-  const [updatedWorkers, setUpdatedWorkers] = useState<IWorker[]>(workers);
 
   useEffect(() => {
     if (location.pathname === '/workers') {
@@ -29,31 +24,17 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
     }
   }, [location.pathname]);
 
-          
-    useEffect (()=>{
-      setUpdatedWorkers(workers);
-    },[workers])
-
-
-  const handleInvite = async (worker: IWorker) => {
-    const data = {
-      phone_number: worker.phone_number,
-      first_name: worker.first_name,
-      last_name: worker.last_name,
-    };
-
-    inviteFetch({ data, method: 'POST' });
+  const handleDelete = async (worker: IWorker) => {
+    await axios.delete<IWorker>(`https://sailau.xyz/api/employee/${worker.id}`);
+    onDeleteWorker();
   };
-  const handleDelete = async (worker:IWorker) =>{
-      await axios.delete<IWorker>(`https://sailau.xyz/api/employee/${worker.id}`);
-      onDeleteWorker();
-  }
+
   const handleRowClick = (workerID: string) => {
     navigate(`/workers/${workerID}`);
   };
 
   return (
-    <div>
+    <div className='9vh'>
       <nav className="flex justify-between items-center mb-8 max-xl:mt-16">
         <h2 className="text-lg font-semibold">Работники</h2>
         {isWorkerPage && (
@@ -67,71 +48,48 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
       </nav>
 
       {showAddWorkerModal && (
-        <AddWorker 
-          onClose={() => { 
-            setShowAddWorkerModal(false); 
-            onAddWorker(); 
-          }} 
+        <AddWorker
+          onClose={() => {
+            setShowAddWorkerModal(false);
+            onAddWorker();
+          }}
         />
       )}
 
-      <div className="overflow-y-hidden">
-        <table className="min-w-full hidden md:table">
+      <div className="overflow-y-auto h-48">
+        <table className={`min-w-full ${isWorkerPage ? 'block' : 'hidden'} md:table`}>
           <thead>
             <tr>
               <th>Имя</th>
               <th>Почта</th>
               <th>Номер телефона</th>
               <th>Зарплата</th>
-              
-              {isWorkerPage &&
-              <>
-                <th>Telegram</th> 
-                <th>WhatsApp</th>
-                <th>Действие</th>
-                </>}
+              {isWorkerPage && <th>Действие</th>}
             </tr>
           </thead>
           <tbody>
-            {updatedWorkers.map((worker) => (
+            {workers.map((worker) => (
               <tr
                 key={worker.id}
                 onClick={() => handleRowClick(worker.id)}
                 className="cursor-pointer hover:bg-gray-100"
               >
-                <td>
-                  {worker.first_name} {worker.last_name}
-                </td>
+                <td>{worker.first_name} {worker.last_name}</td>
                 <td>{worker.email}</td>
                 <td>{worker.phone_number}</td>
                 <td>{worker.salary}</td>
-                
                 {isWorkerPage && (
-                  <>
-                  <td>{worker.is_telegram_verify ? '✔️' : '❌'}</td>
-                  <td>{worker.is_whatsapp_verify ? '✔️' : '❌'}</td>
-                  <td >
+                  <td>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleInvite(worker);
-                      }}
-                      className="bg-blue-500 py-1 px-2 rounded-xl hover:bg-blue-600 text-white"
-                    >
-                      Пригласить
-                    </button>
-                    <button
-                      onClick={(e)=>{
-                        e.stopPropagation();
                         handleDelete(worker);
                       }}
-
                       className="bg-blue-500 py-1 px-4 ml-4 rounded-xl hover:bg-red-600 text-white"
                     >
                       X
                     </button>
                   </td>
-                  </>
                 )}
               </tr>
             ))}
@@ -139,8 +97,8 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
         </table>
 
         {/* Mobile-friendly layout */}
-        <div className="md:hidden space-y-4">
-          {updatedWorkers.map((worker) => (
+        <div className={`md:hidden space-y-4`}>
+          {workers.map((worker) => (
             <div
               key={worker.id}
               onClick={() => handleRowClick(worker.id)}
@@ -151,29 +109,15 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
                   {worker.first_name} {worker.last_name}
                 </div>
                 {isWorkerPage && (
-                  <>
-                  <div>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleInvite(worker);
+                      handleDelete(worker);
                     }}
-                    className="bg-blue-500 py-1 px-2 rounded-xl hover:bg-blue-600 text-white"
+                    className="bg-blue-500 py-1 px-4 ml-4 rounded-xl hover:bg-red-600 text-white"
                   >
-                    Пригласить
+                    X
                   </button>
-                  <button
-                  onClick={(e)=>{
-                    e.stopPropagation();
-                    handleDelete(worker);
-                  }}
-
-                  className="bg-blue-500 py-1 px-4 ml-4 rounded-xl hover:bg-red-600 text-white"
-                >
-                  X
-                </button>
-                </div>
-                </>
                 )}
               </div>
               <div className="space-y-2 text-sm">
@@ -185,13 +129,6 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
                 </div>
                 <div>
                   <span className="font-semibold">Зарплата:</span> {worker.salary}
-                </div>
-                
-                <div>
-                  <span className="font-semibold">Telegram:</span> {worker.is_telegram_verify ? '✔️' : '❌'}
-                </div>
-                <div>
-                  <span className="font-semibold">WhatsApp:</span> {worker.is_whatsapp_verify ? '✔️' : '❌'}
                 </div>
               </div>
             </div>
