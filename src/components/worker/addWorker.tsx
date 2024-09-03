@@ -32,7 +32,6 @@ const AddWorker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     try {
       const { first_name, last_name, email, phone_number, salary, work_schedule } = data;
       const phoneNumber = phone_number.startsWith("+7") ? phone_number.slice(2) : phone_number;
-      
       // Запрос на добавление сотрудника
       const workerResponse = await axios.post('https://sailau.xyz/api/employee/', {
         first_name,

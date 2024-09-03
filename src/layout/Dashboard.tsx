@@ -4,7 +4,7 @@ const basediv = "bg-white dark:bg-gray-800  w-[100%] p-4 rounded shadow"
 
 const Dashboard = () => {
   return (
-    <div className="flex flex-col gap-4 min-lg:px-16 min-lg:py-8  w-full max-lg:mt-12">
+    <div className="flex flex-col gap-4 min-lg:px-16 min-lg:py-8  w-full max-lg:mt-12 dark:bg-slate-800 dark:text-white">
       <div className={`${basediv} max-lg:hidden`}>
         <WorkerManagement />
       </div>

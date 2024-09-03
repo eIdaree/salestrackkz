@@ -4,6 +4,7 @@ import App from './App.tsx';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import Store from './store/user-store.ts';
+import { ThemeProvider } from './redux/context/ThemeContext.tsx';
 
 interface State {
   store: Store;
@@ -26,9 +27,11 @@ const root = ReactDOMClient.createRoot(rootElement);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Context.Provider value={{ store }}>
-        <App />
-      </Context.Provider>
+      <ThemeProvider>
+        <Context.Provider value={{ store }}>
+          <App />
+        </Context.Provider>
+      </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

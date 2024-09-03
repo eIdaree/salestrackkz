@@ -4,14 +4,14 @@ import Sidebar from './layout/Sidebar';
 import Dashboard from './layout/Dashboard';
 import Login from './auth/Login';
 import Register from './auth/Register';
-import WorkerManagement from './components/worker/WorkerManagenent'; // Исправлено
+import WorkerManagement from './components/worker/WorkerManagenent';
 import { ToastContainer } from 'react-toastify';
 import { useContext, useEffect, useState } from 'react';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile';
 import { Context } from './main';
 import Page404 from './pages/Page404';
-import WorkerDetailPage from './components/worker/workerDetailPage'; // Исправлено
+import WorkerDetailPage from './components/worker/workerDetailPage'; 
 
 const ProtectedRoute: React.FC<{ element: JSX.Element }> = ({ element }) => {
   const { store } = useContext(Context);
@@ -53,9 +53,9 @@ function App() {
 
   return (
     <div>
-      <div className="flex h-screen">
+      <div className="flex h-screen dark:bg-slate-900">
         {store.isAuth && <Sidebar onLogout={handleLogout} />}
-        <div className="flex-1 p-4 bg-gray-200">
+        <div className="flex-1 pt-4 p-4 bg-gray-200 dark:bg-slate-800">
           <Routes>
             {/* Роуты для неаутентифицированных пользователей */}
             {!store.isAuth && (

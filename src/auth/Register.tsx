@@ -66,13 +66,13 @@ const Register: React.FC = () => {
       setShowPasswordFields(true);
     }
   };
-  const textStyle = "block text-sm font-medium text-gray-700";
+  const textStyle = "block text-sm font-medium text-gray-700 dark:text-white";
   const errorTextStyle = "text-red-500 text-sm";
   const inputTextStyle =
-    "w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-indigo-300";
+    "w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-indigo-300 dark:text-slate-900 ";
   return (
-    <div className="flex items-center justify-center h-screen bg-white">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-lg">
+    <div className="flex items-center justify-center h-screen bg-white dark:bg-slate-900 dark:text-white mx-[-1em] mt-[-1em]">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-lg dark:bg-slate-800 dark:text-white">
         <div className="flex justify-center mb-4">
           <img src={logo} alt="Logo" className="h-24 w-24" />
         </div>

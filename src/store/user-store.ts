@@ -11,7 +11,7 @@ export default class Store {
 
     constructor() {
         makeAutoObservable(this);
-        this.checkAuth(); // Проверяем аутентификацию при инициализации
+        this.checkAuth(); 
     }
 
     setAuth(bool: boolean) {
@@ -73,14 +73,21 @@ export default class Store {
             const response = await axios.post<AuthResponse>(
                 `${this.API_URL}auth/token/refresh/`,
                 { refresh: refresh_token },
-                { withCredentials: true }
+                { withCredentials: true  }
             );
-
+            const profile_response = await axios.get(
+                `${this.API_URL}profile`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${response.data.access}`,
+                  },
+                }
+              );
             localStorage.setItem('token', response.data.access);
             this.setAuth(true);
-            this.setUser(response.data.user);
+            this.setUser(profile_response.data);
         } catch (e: any) {
-            console.log(e.response?.data?.message);
+            console.log(e);
             localStorage.removeItem('token');
             localStorage.removeItem('refresh');
             this.setAuth(false);

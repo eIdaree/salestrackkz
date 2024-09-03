@@ -36,7 +36,7 @@ const WorkerDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen p-8">
-      <div className="bg-white p-6 rounded-lg shadow-lg">
+      <div className="bg-white p-6 rounded-lg shadow-lg dark:bg-slate-800 dark:text-white">
         <div className='flex gap-4 items-center'>
           <h2 className="text-2xl font-bold mb-4">{worker.first_name} {worker.last_name}</h2>
           <button onClick={() => setIsEditModalOpen(true)} className="bg-blue-500 text-white px-4 py-2 rounded">

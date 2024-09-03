@@ -56,15 +56,15 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
         />
       )}
 
-      <div className="overflow-y-auto h-48">
-        <table className={`min-w-full ${isWorkerPage ? 'block' : 'hidden'} md:table`}>
+      <div className={`${isWorkerPage? '' : 'overflow-y-auto'} h-48`}>
+        <table className={`min-w-full ${isWorkerPage ? 'block' : 'hidden'} md:table dark:text-white`}>
           <thead>
-            <tr>
-              <th>Имя</th>
-              <th>Почта</th>
-              <th>Номер телефона</th>
-              <th>Зарплата</th>
-              {isWorkerPage && <th>Действие</th>}
+            <tr >
+              <th  className='dark:bg-slate-800 border-2 border-white'>Имя</th>
+              <th  className='dark:bg-slate-800 border-2 border-white'>Почта</th>
+              <th  className='dark:bg-slate-800 border-2 border-white'>Номер телефона</th>
+              <th  className='dark:bg-slate-800 border-2 border-white'>Зарплата</th>
+              {isWorkerPage && <th  className='dark:bg-slate-800 border-2 border-white'>Действие</th>}
             </tr>
           </thead>
           <tbody>
@@ -72,14 +72,14 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
               <tr
                 key={worker.id}
                 onClick={() => handleRowClick(worker.id)}
-                className="cursor-pointer hover:bg-gray-100"
+                className="cursor-pointer dark:hover:bg-slate-600 hover:bg-gray-100 "
               >
-                <td>{worker.first_name} {worker.last_name}</td>
-                <td>{worker.email}</td>
-                <td>{worker.phone_number}</td>
-                <td>{worker.salary}</td>
+                <td className='border-2 dark:border-white'>{worker.first_name} {worker.last_name}</td>
+                <td className='border-2 dark:border-white'>{worker.email}</td>
+                <td className='border-2 dark:border-white'>{worker.phone_number}</td>
+                <td className='border-2 dark:border-white'>{worker.salary}</td>
                 {isWorkerPage && (
-                  <td>
+                  <td className='border-2 dark:border-white'>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -104,7 +104,7 @@ const WorkerTable: React.FC<WorkerTableProps> = ({ workers, onAddWorker, onDelet
               onClick={() => handleRowClick(worker.id)}
               className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow cursor-pointer"
             >
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex justify-between items-center mb-4 ">
                 <div className="text-lg font-semibold">
                   {worker.first_name} {worker.last_name}
                 </div>
